@@ -1,5 +1,7 @@
 package org.example.service.serviceImpl;
 
+import org.example.Exceptions.BadRequestException;
+import org.example.Exceptions.UnauthorizedException;
 import org.example.dto.UserPOJO;
 import org.example.repos.UserRepo;
 import org.example.service.UserService;
@@ -38,26 +40,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authorise(UserPOJO userPOJO) {
-        return userRepo.findAll().contains(userPOJO);
+    public void authorise(UserPOJO userPOJO) {
+        if(!userRepo.findAll().contains(userPOJO))
+            throw new UnauthorizedException("Unauthorized");
     }
 
     @Override
-    public boolean changePassword(String body) {
+    public void changePassword(String body) {
         String[] parts = body.split(" ");
         for (UserPOJO item : userRepo.findAll()) {
             if (Objects.equals(item.getUsername(), parts[0]) &&
                     Objects.equals(item.getPassword(), parts[1]) &&
                     !Objects.equals(parts[1], parts[2])) {
                 item.setPassword(parts[2]);
-                return true;
+                return;
             }
         }
-        return false;
+        throw new BadRequestException("bad request");
     }
 
     @Override
     public void save(UserPOJO userPOJO) {
+        for (UserPOJO item : userRepo.findAll()) {
+            if (Objects.equals(item.getUsername(), userPOJO.getUsername()))
+                throw new BadRequestException("bad request");
+        }
         userRepo.saveUser(userPOJO);
     }
 }

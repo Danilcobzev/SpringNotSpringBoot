@@ -1,6 +1,8 @@
 package org.example.servise_test;
 
 
+import org.example.Exceptions.BadRequestException;
+import org.example.Exceptions.UnauthorizedException;
 import org.example.dto.UserPOJO;
 import org.example.repos.UserRepo;
 import org.example.service.serviceImpl.UserServiceImpl;
@@ -38,38 +40,40 @@ public class UserServiceImplTest {
         Assertions.assertArrayEquals(users.toArray(), userService.getAll().toArray());
     }
     @Test
-    void authoriseOk(){
+    void authorise_ok(){
         List<UserPOJO> users = new ArrayList<>();
         users.add(new UserPOJO("Danil", "passw"));
         users.add(new UserPOJO("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        Assertions.assertTrue(userService.authorise(new UserPOJO("Danil", "passw")));
+        userService.authorise(new UserPOJO("Danil", "passw"));
+        Mockito.verify(userRepo,Mockito.times(1)).findAll();
     }
 
     @Test
-    void notAuthorise(){
+    void authorise_badCredentials(){
         List<UserPOJO> users = new ArrayList<>();
         users.add(new UserPOJO("Danil", "passw"));
         users.add(new UserPOJO("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        Assertions.assertFalse(userService.authorise(new UserPOJO("Dima", "passw")));
+        Assertions.assertThrows(UnauthorizedException.class,()->userService.authorise(new UserPOJO("Dima", "passw")));
     }
     @Test
-    void changePasswordOk(){
+    void changePassword_ok(){
         List<UserPOJO> users = new ArrayList<>();
         users.add(new UserPOJO("Danil", "passw"));
         users.add(new UserPOJO("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        Assertions.assertTrue(userService.changePassword("Danil passw newPassw"));
+        userService.changePassword("Danil passw newPassw");
+        Mockito.verify(userRepo,Mockito.times(1)).findAll();
     }
 
     @Test
-    void notChangePassword(){
+    void changePassword_badRequest(){
         List<UserPOJO> users = new ArrayList<>();
         users.add(new UserPOJO("Danil", "passw"));
         users.add(new UserPOJO("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        Assertions.assertFalse(userService.changePassword("Dima passw newPassw"));
+        Assertions.assertThrows(BadRequestException.class,()->userService.changePassword("Dima passw newPassw"));
     }
 
     @Test
