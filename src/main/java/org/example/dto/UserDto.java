@@ -2,7 +2,7 @@ package org.example.dto;
 
 import java.util.Objects;
 
-public class UserPOJO {
+public class UserDto {
     private String username;
     private String password;
 
@@ -22,11 +22,14 @@ public class UserPOJO {
         this.password = password;
     }
 
+    public UserDto() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        UserPOJO userPOJO = (UserPOJO) o;
-        return Objects.equals(getUsername(), userPOJO.getUsername()) && Objects.equals(getPassword(), userPOJO.getPassword());
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(getUsername(), userDto.getUsername()) && Objects.equals(getPassword(), userDto.getPassword());
     }
 
     @Override
@@ -34,7 +37,7 @@ public class UserPOJO {
         return Objects.hash(getUsername(), getPassword());
     }
 
-    public UserPOJO(String username, String password) {
+    public UserDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

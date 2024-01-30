@@ -1,8 +1,7 @@
 package org.example.controller;
 
-import org.example.dto.UserPOJO;
+import org.example.dto.UserDto;
 import org.example.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +26,14 @@ public class UserController {
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<List<UserPOJO>> getAll() {
+    public ResponseEntity<List<UserDto>> getAll() {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(userService.getAll());
     }
 
     @PostMapping("/test")
-    public ResponseEntity<String> test(@RequestBody UserPOJO user) {
-        //still not working
-        return ResponseEntity.ok("conflict");
+    public ResponseEntity<String> test(@RequestBody UserDto user) {
+        System.out.println(user.getUsername());
+        return ResponseEntity.ok("It's working!!!!!!!!!!");
     }
 
     @PostMapping("/changePassword")

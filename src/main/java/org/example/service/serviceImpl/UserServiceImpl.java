@@ -2,11 +2,12 @@ package org.example.service.serviceImpl;
 
 import org.example.Exceptions.BadRequestException;
 import org.example.Exceptions.UnauthorizedException;
-import org.example.dto.UserPOJO;
+import org.example.dto.UserDto;
 import org.example.repos.UserRepo;
 import org.example.service.UserService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,34 +22,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserPOJO> getAll() {
-        ArrayList<UserPOJO> list = new ArrayList<UserPOJO>();
-        for (UserPOJO item : userRepo.findAll()) {
-            UserPOJO userPOJO = new UserPOJO(
+    public List<UserDto> getAll() {
+        ArrayList<UserDto> list = new ArrayList<UserDto>();
+        for (UserDto item : userRepo.findAll()) {
+            UserDto userDto = new UserDto(
                     item.getUsername(),
                     item.getPassword()
             );
-            list.add(userPOJO);
+            list.add(userDto);
         }
         return list;
     }
 
     @Override
-    public UserPOJO getUserPOJOFromBody(String body) {
+    public UserDto getUserPOJOFromBody(String body) {
         String[] parts = body.split(" ");
-        return new UserPOJO(parts[0], parts[1]);
+        return new UserDto(parts[0], parts[1]);
     }
 
     @Override
-    public void authorise(UserPOJO userPOJO) {
-        if(!userRepo.findAll().contains(userPOJO))
+    public void authorise(UserDto userDto) {
+        if(!userRepo.findAll().contains(userDto))
             throw new UnauthorizedException("Unauthorized");
     }
 
     @Override
     public void changePassword(String body) {
         String[] parts = body.split(" ");
-        for (UserPOJO item : userRepo.findAll()) {
+        for (UserDto item : userRepo.findAll()) {
             if (Objects.equals(item.getUsername(), parts[0]) &&
                     Objects.equals(item.getPassword(), parts[1]) &&
                     !Objects.equals(parts[1], parts[2])) {
@@ -60,11 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserPOJO userPOJO) {
-        for (UserPOJO item : userRepo.findAll()) {
-            if (Objects.equals(item.getUsername(), userPOJO.getUsername()))
+    public void save(UserDto userDto) {
+        for (UserDto item : userRepo.findAll()) {
+            if (Objects.equals(item.getUsername(), userDto.getUsername()))
                 throw new BadRequestException("bad request");
         }
-        userRepo.saveUser(userPOJO);
+        userRepo.saveUser(userDto);
     }
 }
