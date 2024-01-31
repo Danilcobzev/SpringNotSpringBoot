@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.UserDto;
 import org.example.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody(required = false) String body) {
-        userService.save(userService.getUserPOJOFromBody(body));
+    public ResponseEntity<String> registration(@RequestBody UserDto user) {
+        userService.save(user);
         return ResponseEntity.ok("user is registered");
     }
 

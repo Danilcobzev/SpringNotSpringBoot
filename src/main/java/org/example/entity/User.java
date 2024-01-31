@@ -1,9 +1,10 @@
 package org.example.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name = "myuser", schema = "public")
+@Table(name = "users", schema = "public")
 public class User {
 
     public User() {
@@ -11,20 +12,20 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = true)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(name = "username", nullable = true)
     private String username;
     @Column(name = "password", nullable = true)
     private String password;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

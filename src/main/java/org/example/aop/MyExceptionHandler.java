@@ -1,6 +1,7 @@
 package org.example.aop;
 
 import org.example.Exceptions.BadRequestException;
+import org.example.Exceptions.MyHibernateException;
 import org.example.Exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,10 @@ public class MyExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<String> handleUnauthorized(){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad request");
+    }
+
+    @ExceptionHandler(MyHibernateException.class)
+    public ResponseEntity<String> handleHibernate(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hibernate exception");
     }
 }

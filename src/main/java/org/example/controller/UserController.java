@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.UserDto;
+import org.example.dto.UserDtoNewPassword;
 import org.example.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping("/authorise")
-    public ResponseEntity<String> authorise(@RequestBody(required = false) String body) {
-        userService.authorise(userService.getUserPOJOFromBody(body));
+    public ResponseEntity<String> authorise(@RequestBody UserDto user) {
+        userService.authorise(user);
         return ResponseEntity.ok("user is authorized");
     }
 
@@ -30,15 +31,9 @@ public class UserController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(userService.getAll());
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<String> test(@RequestBody UserDto user) {
-        System.out.println(user.getUsername());
-        return ResponseEntity.ok("It's working!!!!!!!!!!");
-    }
-
     @PostMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody(required = false) String body) {
-        userService.changePassword(body);
+    public ResponseEntity<String> changePassword(@RequestBody UserDtoNewPassword userDtoNewPassword) {
+        userService.changePassword(userDtoNewPassword);
         return ResponseEntity.ok("password changed");
     }
 }

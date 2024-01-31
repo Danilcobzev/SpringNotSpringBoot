@@ -4,6 +4,7 @@ package org.example.servise_test;
 import org.example.Exceptions.BadRequestException;
 import org.example.Exceptions.UnauthorizedException;
 import org.example.dto.UserDto;
+import org.example.dto.UserDtoNewPassword;
 import org.example.repos.UserRepo;
 import org.example.service.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -24,12 +25,6 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepo userRepo;
-
-    @Test
-    void getUserPOJOFromBody() {
-        Assertions.assertEquals(new UserDto("Danil", "passw")
-                , userService.getUserPOJOFromBody("Danil passw"));
-    }
 
     @Test
     void getAll() {
@@ -63,7 +58,7 @@ public class UserServiceImplTest {
         users.add(new UserDto("Danil", "passw"));
         users.add(new UserDto("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        userService.changePassword("Danil passw newPassw");
+        userService.changePassword(new UserDtoNewPassword("Danil", "passw","newpass"));
         Mockito.verify(userRepo,Mockito.times(1)).findAll();
     }
 
@@ -73,7 +68,7 @@ public class UserServiceImplTest {
         users.add(new UserDto("Danil", "passw"));
         users.add(new UserDto("Denis", "password"));
         Mockito.when(userRepo.findAll()).thenReturn(users);
-        Assertions.assertThrows(BadRequestException.class,()->userService.changePassword("Dima passw newPassw"));
+        Assertions.assertThrows(BadRequestException.class,()->userService.changePassword(new UserDtoNewPassword("Dima", "passw","newpass")));
     }
 
     @Test
